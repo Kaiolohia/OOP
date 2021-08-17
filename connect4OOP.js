@@ -1,9 +1,10 @@
 class Game {
-  constructor(WIDTH = 7, HEIGHT = 6) {
+  constructor(player1, player2, WIDTH = 7, HEIGHT = 6) {
+    this.players= [player1, player2]
     this.HEIGHT = HEIGHT;
     this.WIDTH = WIDTH;
     this.board = [];
-    this.currPlayer = 1;
+    this.currPlayer = player1;
     this.makeBoard();
     this.makeHtmlBoard();
   }
@@ -70,8 +71,7 @@ class Game {
 
   handleClick(evt) {
     // get x from ID of clicked cell
-    console.log(this.checkForWin)
-
+    
     const x = +evt.target.id;
 
     // get next spot in column (if none, ignore click)
@@ -98,7 +98,7 @@ class Game {
     }
 
     // switch players
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === this.currPlayer[0] ? this.currPlayer[1] : this.currPlayer[0];
   }
 
   checkForWin() {
@@ -150,4 +150,20 @@ class Game {
   }
 }
 
-const CurGame = new Game(7, 6);
+class Player {
+  constructor(color) {
+    this.color = color
+  }
+}
+
+const start = document.querySelector('form')
+start.addEventListener('submit', (evt) => {
+  evt.preventDefault()
+  const p1 = document.getElementById('p1c')
+  const p2 = document.getElementById('p2c')
+  let player1 = new Player(p1.value)
+  let player2 = new Player(p2.value)
+  const CurGame = new Game(player1,player2)
+  p1.value = ''
+  p2.value = ''
+})
